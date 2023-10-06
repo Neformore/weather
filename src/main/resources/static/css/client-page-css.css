@@ -1,0 +1,30 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 35px 0;
+}
+
+.header a {
+    text-decoration: none;
+}
+
+.search-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-btn {
+    background: #2065e7;
+}
+
+.search-result {
+    border: 2px solid #dddcdc;
+    border-radius: 20px;
+    width: 25%;
+    padding: 10px;
+    margin: 20px 10px;
+}
+
+.logo {
+    color: #2065e7;
+}

@@ -1,0 +1,14 @@
+<div th:fragment="header" class="header">
+    <h3 class="logo">
+        <a href="/client">Weather tracker</a>
+    </h3>
+    <form method="post" action="/client/find" class="search-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <input class="form-control mt-2" name="locationName" placeholder="Enter the location name">
+        <button type="submit" class="btn btn-success mt-2 search-btn">Search</button>
+    </form>
+    <form th:action="@{/logout}" method="post">
+<!--        <label th:text="${user.getEmail()}"></label>-->
+        <button type="submit" class="btn btn-success mt-2 search-btn">Logout</button>
+    </form>
+</div>
