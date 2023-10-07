@@ -18,6 +18,7 @@
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <input type="hidden" th:value="${locationDTO.getLat()}" name="lat">
             <input type="hidden" th:value="${locationDTO.getLon()}" name="lon">
+            <input type="hidden" th:value="${locationDTO.getName()}" name="locationName">
             <button type="submit" class="btn btn-success mt-2 search-btn">Add to tracked locations</button>
         </form>
     </div>

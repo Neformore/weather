@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "locations")
@@ -26,6 +26,15 @@ public class Location {
     @Column(name = "longitude")
     private BigDecimal longitude;
 
-    @ManyToMany(mappedBy = "locations")
-    private List<User> users;
+    @Column(name = "name")
+    private String name;
+
+    @ManyToMany(mappedBy = "locations", fetch = FetchType.EAGER)
+    private Set<User> users;
+
+    public Location(BigDecimal latitude, BigDecimal longitude, String name) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+    }
 }
