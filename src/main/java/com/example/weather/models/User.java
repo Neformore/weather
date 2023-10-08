@@ -30,12 +30,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_locations",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "locations_id")
-    )
-    private Set<Location> locations;
+    @OneToMany(mappedBy = "user")
+    private Set<UserLocation> userLocation;
 }
 

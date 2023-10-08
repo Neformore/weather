@@ -7,8 +7,10 @@
         <input class="form-control mt-2" name="locationName" placeholder="Enter the location name">
         <button type="submit" class="btn btn-success mt-2 search-btn">Search</button>
     </form>
-    <form th:action="@{/logout}" method="post">
-<!--        <label th:text="${user.getEmail()}"></label>-->
-        <button type="submit" class="btn btn-success mt-2 search-btn">Logout</button>
-    </form>
+    <div class="logout-block">
+        <span th:text="${user.getEmail()}" class="user-mail"></span>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-success mt-2 search-btn">Logout</button>
+        </form>
+    </div>
 </div>

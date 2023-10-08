@@ -12,7 +12,6 @@ import java.util.Set;
 @Table(name = "locations")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Location {
 
     @Id
@@ -29,8 +28,8 @@ public class Location {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "locations", fetch = FetchType.EAGER)
-    private Set<User> users;
+    @OneToMany(mappedBy = "location")
+    private Set<UserLocation> userLocation;
 
     public Location(BigDecimal latitude, BigDecimal longitude, String name) {
         this.latitude = latitude;

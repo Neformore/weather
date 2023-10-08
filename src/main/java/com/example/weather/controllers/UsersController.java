@@ -3,8 +3,10 @@ package com.example.weather.controllers;
 import com.example.weather.dto.LocationDTO;
 import com.example.weather.models.Location;
 import com.example.weather.models.User;
+import com.example.weather.models.UserLocation;
 import com.example.weather.secutiry.UsersDetails;
 import com.example.weather.service.LocationService;
+import com.example.weather.service.UserLocationService;
 import com.example.weather.service.UsersService;
 import com.example.weather.servlet.SearchServlet;
 import com.example.weather.util.JsonToLocation;
@@ -23,26 +25,42 @@ public class UsersController {
 
     private final LocationService locationService;
     private final UsersService usersService;
+    private final UserLocationService userLocationService;
 
     @Autowired
-    public UsersController(LocationService locationService, UsersService usersService) {
+    public UsersController(LocationService locationService, UsersService usersService, UserLocationService userLocationService) {
         this.locationService = locationService;
         this.usersService = usersService;
+        this.userLocationService = userLocationService;
     }
 
     @GetMapping()
-    public String getClientPage(@ModelAttribute("user") User user) {
+    public String getClientPage(@AuthenticationPrincipal UsersDetails usersDetails, Model model) {
+        User user = usersDetails.getUser();
+        user.setUserLocation(userLocationService.findUserLocation(user));
+
+        for (UserLocation userLocation : user.getUserLocation()) {
+            SearchServlet.doLoadLocationGet(userLocation);
+        }
+
+        model.addAttribute("user", user);
         return "client-page";
     }
 
     @GetMapping("/search-result")
-    public String getSearchResultPage(@ModelAttribute("locationDTO") LocationDTO locationDTO) {
+    public String getSearchResultPage(@ModelAttribute("locationDTO") LocationDTO locationDTO,
+                                      @AuthenticationPrincipal UsersDetails usersDetails,
+                                      Model model) {
+        model.addAttribute("user", usersDetails.getUser());
         return "search-result";
     }
 
     @PostMapping("/find")
-    public String findLocation(@RequestParam String locationName, Model model) {
-        model.addAttribute("locationDTO", JsonToLocation.makeLocationFromJson(SearchServlet.doRestGet(locationName)));
+    public String findLocation(@RequestParam String locationName,
+                               @AuthenticationPrincipal UsersDetails usersDetails,
+                               Model model) {
+        model.addAttribute("locationDTO", JsonToLocation.makeLocationFromJson(SearchServlet.doRestSearchGet(locationName)));
+        model.addAttribute("user", usersDetails.getUser());
         return "search-result";
     }
 
@@ -56,12 +74,10 @@ public class UsersController {
 
         if (opLocation.isEmpty()) {
             Location location = new Location(lat, lon, locationName);
-            locationService.addUser(user, location);
-            usersService.addLocation(user, location);
             locationService.save(location);
+            userLocationService.save(user, location);
         } else {
-            locationService.addUser(user, opLocation.get());
-            usersService.addLocation(user, opLocation.get());
+            userLocationService.save(user, opLocation.get());
         }
         return "redirect:/client";
     }

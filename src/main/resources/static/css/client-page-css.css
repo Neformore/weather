@@ -11,6 +11,15 @@
 .search-form {
     display: flex;
     justify-content: space-between;
+    padding-left: 15px
+}
+
+.logout-block {
+    display: flex;
+}
+
+.user-mail {
+    padding: 13px 10px;
 }
 
 .search-btn {

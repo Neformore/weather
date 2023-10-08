@@ -28,11 +28,4 @@ public class LocationService {
         return locationRepository.findByName(name);
     }
 
-    public void addUser(User user, Location location) {
-        if(location.getUsers() == null) {
-            location.setUsers(new HashSet<>(Set.of(user)));
-        } else {
-            location.getUsers().add(user);
-        }
-    }
 }
