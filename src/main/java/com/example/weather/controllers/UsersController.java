@@ -4,12 +4,12 @@ import com.example.weather.dto.LocationDTO;
 import com.example.weather.models.Location;
 import com.example.weather.models.User;
 import com.example.weather.models.UserLocation;
+import com.example.weather.models.entity.WeatherApiResponse;
 import com.example.weather.secutiry.UsersDetails;
 import com.example.weather.service.LocationService;
 import com.example.weather.service.UserLocationService;
 import com.example.weather.service.UsersService;
-import com.example.weather.servlet.SearchServlet;
-import com.example.weather.util.JsonToLocation;
+import com.example.weather.service.WeatherApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -38,12 +40,14 @@ public class UsersController {
     public String getClientPage(@AuthenticationPrincipal UsersDetails usersDetails, Model model) {
         User user = usersDetails.getUser();
         user.setUserLocation(userLocationService.findUserLocation(user));
+        List<WeatherApiResponse> userWeather = new ArrayList<>();
 
         for (UserLocation userLocation : user.getUserLocation()) {
-            SearchServlet.doLoadLocationGet(userLocation);
+            userWeather.add(WeatherApiService.getWeather(userLocation));
         }
 
         model.addAttribute("user", user);
+        model.addAttribute("weatherList", userWeather);
         return "client-page";
     }
 
@@ -59,7 +63,7 @@ public class UsersController {
     public String findLocation(@RequestParam String locationName,
                                @AuthenticationPrincipal UsersDetails usersDetails,
                                Model model) {
-        model.addAttribute("locationDTO", JsonToLocation.makeLocationFromJson(SearchServlet.doRestSearchGet(locationName)));
+        model.addAttribute("locationDTO", WeatherApiService.getLocation(locationName));
         model.addAttribute("user", usersDetails.getUser());
         return "search-result";
     }
