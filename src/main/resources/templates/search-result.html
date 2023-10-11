@@ -12,15 +12,20 @@
     <h2 class="">
         Search result
     </h2>
-    <div class="container search-result">
-        <h4 th:text="${locationDTO.getName()}"></h4>
-        <form method="post" action="/client/add-location">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-            <input type="hidden" th:value="${locationDTO.getLat()}" name="lat">
-            <input type="hidden" th:value="${locationDTO.getLon()}" name="lon">
-            <input type="hidden" th:value="${locationDTO.getName()}" name="locationName">
-            <button type="submit" class="btn btn-success mt-2 search-btn">Add to tracked locations</button>
-        </form>
+    <div th:if="${locationDTO}">
+        <div class="container search-result">
+            <h4 th:text="${locationDTO.getName()}"></h4>
+            <form method="post" action="/client/add-location">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" th:value="${locationDTO.getLat()}" name="lat">
+                <input type="hidden" th:value="${locationDTO.getLon()}" name="lon">
+                <input type="hidden" th:value="${locationDTO.getName()}" name="locationName">
+                <button type="submit" class="btn btn-success mt-2 search-btn">Add to tracked locations</button>
+            </form>
+        </div>
+    </div>
+    <div th:unless="${locationDTO}">
+        <h3>Not found</h3>
     </div>
 </section>
 </body>

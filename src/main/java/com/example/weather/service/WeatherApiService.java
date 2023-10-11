@@ -27,7 +27,8 @@ public class WeatherApiService {
         RestTemplate restTemplate = new RestTemplate();
         String url = GET_SEARCH_URL_FIRST_PART + locationName + GET_SEARCH_URL_SECOND_PART + API_KEY;
         String response = restTemplate.getForObject(url, String.class);
-
+        if (response.equals("[]"))
+            return null;
         try {
             return objectMapper.readValue(response,
                     new TypeReference<List<LocationDTO>>() {}).get(0);

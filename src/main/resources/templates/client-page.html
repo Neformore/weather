@@ -12,6 +12,55 @@
     <h2 class="">
         Current Weather
     </h2>
+    <div th:if="${weatherList}">
+        <div th:each="item : ${weatherList}" class="item">
+            <h3 th:text="${item.getName()}" class="country-name"></h3>
+            <div class="temperature">
+                <h4 th:text="${(item.weatherApiResponse.main.temperature - 273).intValue()} + '°C'" class="current-temperature"></h4>
+                <span th:text="'Feels like ' + ${(item.weatherApiResponse.main.temperatureFeelsLike - 273).intValue()} + '°C'"></span>
+            </div>
+            <div class="item-list-ul">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <i class="fas fa-temperature-low"
+                           style="margin-right: 4px;width: 20px;"></i>
+                        <span th:text="'Min ' + ${(item.weatherApiResponse.main.getTemperatureMin() - 273).intValue()} + '°C'"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-cloud"
+                           style="margin-right: 4px;width: 20px;padding: 0px;font-size: 14px;"></i>
+                        <span th:text="'Humidity ' + ${item.weatherApiResponse.main.getHumidity()} + '%'"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-wind" style="margin-right: 5px;width: 20px;"></i>
+                        <span th:text="'Wind speed '+ ${item.weatherApiResponse.wind.getSpeed()} + ' km/h'"></span>
+                    </li>
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <i class="fas fa-temperature-low"
+                           style="margin-right: 4px;width: 20px;"></i>
+                        <span th:text="'Max ' + ${(item.weatherApiResponse.main.getTemperatureMax() - 273).intValue()} + '°C'"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-cloud"
+                           style="margin-right: 4px;width: 20px;padding: 0px;font-size: 14px;"></i>
+                        <span th:text="'Pressure ' + ${item.weatherApiResponse.main.getPressure()} + ' hPa'"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-wind" style="margin-right: 5px;width: 20px;"></i>
+                        <span th:text="'Weather: '+ ${item.weatherApiResponse.weather.get(0).currentState}"></span>
+                    </li>
+                </ul>
+            </div>
+            <form th:action="@{/client/{name}(name=${item.getName()})}" th:method="DELETE">
+                <button type="submit" class="btn btn-success mt-2 search-btn">Delete</button>
+            </form>
+        </div>
+    </div>
+    <div th:unless="${weatherList}">
+        <h3>No weather</h3>
+    </div>
 </section>
 </body>
 </html>

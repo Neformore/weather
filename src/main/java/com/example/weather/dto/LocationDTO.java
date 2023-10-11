@@ -1,5 +1,6 @@
 package com.example.weather.dto;
 
+import com.example.weather.models.entity.WeatherApiResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,11 @@ public class LocationDTO {
 
     @JsonProperty("name")
     private String name;
+
+    private WeatherApiResponse weatherApiResponse;
+
+    public LocationDTO(String name, WeatherApiResponse weatherApiResponse) {
+        this.name = name;
+        this.weatherApiResponse = weatherApiResponse;
+    }
 }

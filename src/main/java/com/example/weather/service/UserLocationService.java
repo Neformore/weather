@@ -32,4 +32,9 @@ public class UserLocationService {
     public Set<UserLocation> findUserLocation(User user) {
         return userLocationRepository.findUserLocation(user);
     }
+
+    @Transactional
+    public void remove(String name) {
+
+    }
 }

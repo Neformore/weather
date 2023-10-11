@@ -37,3 +37,31 @@
 .logo {
     color: #2065e7;
 }
+
+.item-list-ul {
+    display: flex;
+}
+
+.item-list-ul ul{
+    margin: 0 5px;
+}
+
+.item {
+    border: 2px solid #e7e7e7;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 10px;
+    width: 40%;
+}
+
+.country-name {
+    margin-left: 10px;
+}
+
+.temperature {
+    margin: 0 0 15px 15px;
+}
+
+.current-temperature {
+    color: #2065e7;
+}

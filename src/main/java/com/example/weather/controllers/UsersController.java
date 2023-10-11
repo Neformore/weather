@@ -4,11 +4,9 @@ import com.example.weather.dto.LocationDTO;
 import com.example.weather.models.Location;
 import com.example.weather.models.User;
 import com.example.weather.models.UserLocation;
-import com.example.weather.models.entity.WeatherApiResponse;
 import com.example.weather.secutiry.UsersDetails;
 import com.example.weather.service.LocationService;
 import com.example.weather.service.UserLocationService;
-import com.example.weather.service.UsersService;
 import com.example.weather.service.WeatherApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,13 +24,11 @@ import java.util.Optional;
 public class UsersController {
 
     private final LocationService locationService;
-    private final UsersService usersService;
     private final UserLocationService userLocationService;
 
     @Autowired
-    public UsersController(LocationService locationService, UsersService usersService, UserLocationService userLocationService) {
+    public UsersController(LocationService locationService, UserLocationService userLocationService) {
         this.locationService = locationService;
-        this.usersService = usersService;
         this.userLocationService = userLocationService;
     }
 
@@ -40,10 +36,10 @@ public class UsersController {
     public String getClientPage(@AuthenticationPrincipal UsersDetails usersDetails, Model model) {
         User user = usersDetails.getUser();
         user.setUserLocation(userLocationService.findUserLocation(user));
-        List<WeatherApiResponse> userWeather = new ArrayList<>();
+        List<LocationDTO> userWeather = new ArrayList<>();
 
         for (UserLocation userLocation : user.getUserLocation()) {
-            userWeather.add(WeatherApiService.getWeather(userLocation));
+            userWeather.add(new LocationDTO(userLocation.getLocation().getName(), WeatherApiService.getWeather(userLocation)));
         }
 
         model.addAttribute("user", user);
@@ -83,6 +79,13 @@ public class UsersController {
         } else {
             userLocationService.save(user, opLocation.get());
         }
+        return "redirect:/client";
+    }
+
+    @DeleteMapping("/{name}")
+    public String removeLocation(@PathVariable("name") String locationName,
+                                 @AuthenticationPrincipal UsersDetails usersDetails) {
+
         return "redirect:/client";
     }
 }
