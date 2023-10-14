@@ -7,19 +7,26 @@ import com.example.weather.models.entity.WeatherApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+@Service
 public class WeatherApiService {
 
-    private static final String API_KEY = "a8fb3b67da5736ba5a1028e989bb34c2";
+    private static String API_KEY;
     private static final String GET_SEARCH_URL_FIRST_PART = "http://api.openweathermap.org/geo/1.0/direct?q=";
     private static final String GET_SEARCH_URL_SECOND_PART = "&limit=1&appid=";
     private static final String GET_LOAD_URL_FIRST_PART = "https://api.openweathermap.org/data/2.5/weather?";
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Value("${api.key}")
+    public void SetApiKey(String apiKey) {
+        WeatherApiService.API_KEY = apiKey;
+    }
     //    http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid={API key} - HTTP location request example
     //    https://api.openweathermap.org/data/2.5/weather?lat=33.44&lon=-94.04&appid={API key} - HTTP weather request example
 
