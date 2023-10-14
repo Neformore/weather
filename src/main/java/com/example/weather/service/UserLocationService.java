@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -19,6 +20,10 @@ public class UserLocationService {
     @Autowired
     public UserLocationService(UserLocationRepository userLocationRepository) {
         this.userLocationRepository = userLocationRepository;
+    }
+
+    public Optional<UserLocation> findByLocation(Location location) {
+        return userLocationRepository.findUserLocationByLocation(location);
     }
 
     @Transactional
@@ -34,7 +39,7 @@ public class UserLocationService {
     }
 
     @Transactional
-    public void remove(String name) {
-
+    public void remove(UserLocationKey userLocationKey) {
+        userLocationRepository.deleteUserLocationById(userLocationKey);
     }
 }

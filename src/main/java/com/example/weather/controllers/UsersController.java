@@ -86,6 +86,19 @@ public class UsersController {
     public String removeLocation(@PathVariable("name") String locationName,
                                  @AuthenticationPrincipal UsersDetails usersDetails) {
 
+        Optional<UserLocation> userLocationOptional = usersDetails.getUser().getUserLocation().stream()
+                .filter(userLocation -> userLocation
+                        .getLocation()
+                        .getName()
+                        .equals(locationName))
+                .findAny();
+
+        userLocationService.remove(userLocationOptional.get().getId());
+
+        if (userLocationService.findByLocation(userLocationOptional.get().getLocation()).isEmpty()) {
+            locationService.remove(userLocationOptional.get().getLocation());
+        }
+
         return "redirect:/client";
     }
 }

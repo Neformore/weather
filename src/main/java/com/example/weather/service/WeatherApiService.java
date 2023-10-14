@@ -20,8 +20,8 @@ public class WeatherApiService {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    //    http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid={API key} - HTTP search request example
-    //    https://api.openweathermap.org/data/2.5/weather?lat=33.44&lon=-94.04&appid={API key} - HTTP load request example
+    //    http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid={API key} - HTTP location request example
+    //    https://api.openweathermap.org/data/2.5/weather?lat=33.44&lon=-94.04&appid={API key} - HTTP weather request example
 
     public static LocationDTO getLocation(String locationName) {
         RestTemplate restTemplate = new RestTemplate();
