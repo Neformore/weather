@@ -65,3 +65,10 @@
 .current-temperature {
     color: #2065e7;
 }
+
+.form-block {
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+    margin-left: 8px;
+}

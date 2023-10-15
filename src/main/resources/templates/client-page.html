@@ -9,7 +9,7 @@
 <body>
 <header class="container" th:insert="~{block/header :: header}"> </header>
 <section class="container">
-    <h2 class="">
+    <h2>
         Current Weather
     </h2>
     <div th:if="${weatherList}">
@@ -53,9 +53,14 @@
                     </li>
                 </ul>
             </div>
-            <form th:action="@{/client/{name}(name=${item.getName()})}" th:method="DELETE">
-                <button type="submit" class="btn btn-success mt-2 search-btn">Delete</button>
-            </form>
+            <div class="form-block">
+                <form th:action="@{/client/forecast/{locationName}(locationName=${item.getName()})}" th:method="POST">
+                    <button type="submit" class="btn btn-success mt-2 search-btn">Forecast</button>
+                </form>
+                <form th:action="@{/client/{locationName}(locationName=${item.getName()})}" th:method="DELETE">
+                    <button type="submit" class="btn btn-success mt-2 search-btn">Delete</button>
+                </form>
+            </div>
         </div>
     </div>
     <div th:unless="${weatherList}">

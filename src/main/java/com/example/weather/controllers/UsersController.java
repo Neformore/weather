@@ -82,16 +82,21 @@ public class UsersController {
         return "redirect:/client";
     }
 
-    @DeleteMapping("/{name}")
-    public String removeLocation(@PathVariable("name") String locationName,
+    @PostMapping("/forecast/{locationName}")
+    public String forecast(@PathVariable("locationName") String locationName,
+                           @AuthenticationPrincipal UsersDetails usersDetails,
+                           Model model) {
+        Optional<UserLocation> userLocationOptional = getUserLocation(locationName, usersDetails);
+        model.addAttribute("forecast", WeatherApiService.getForecast(userLocationOptional.get()).getHourlyForecasts());
+        model.addAttribute("user", usersDetails.getUser());
+        return "forecast";
+    }
+
+    @DeleteMapping("/{locationName}")
+    public String removeLocation(@PathVariable("locationName") String locationName,
                                  @AuthenticationPrincipal UsersDetails usersDetails) {
 
-        Optional<UserLocation> userLocationOptional = usersDetails.getUser().getUserLocation().stream()
-                .filter(userLocation -> userLocation
-                        .getLocation()
-                        .getName()
-                        .equals(locationName))
-                .findAny();
+        Optional<UserLocation> userLocationOptional = getUserLocation(locationName, usersDetails);
 
         userLocationService.remove(userLocationOptional.get().getId());
 
@@ -100,5 +105,14 @@ public class UsersController {
         }
 
         return "redirect:/client";
+    }
+
+    private Optional<UserLocation> getUserLocation(String locationName, UsersDetails usersDetails) {
+        return usersDetails.getUser().getUserLocation().stream()
+                .filter(userLocation -> userLocation
+                        .getLocation()
+                        .getName()
+                        .equals(locationName))
+                .findAny();
     }
 }
